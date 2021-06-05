@@ -32,7 +32,7 @@ public class ScheduleController {
 	@Autowired ScheduleMapper scMapper;
 	
 	
-	//마이홈페이지에 있는 calendar에서 일정이 보이는데, mentor와 mentee가 일정을 공유. mentorid와 menteeid에 각각 로그인된 아이디를 넣으면 조회가 가능하다고 생각했으나, mentor가 mentee일 수도 있다는 경우를 고려하지 않아 수정 필요.
+	//마이홈페이지에 있는 calendar에서 일정이 보이는데, mentor와 mentee가 일정을 공유. 
 	@RequestMapping("/getSearchSchedule")
 	@ResponseBody
 	public List<Map<String, String>> getSearchSchedule(ScheduleVO vo, HttpServletRequest request) {
@@ -183,7 +183,8 @@ public class ScheduleController {
 		
 	}
 	
-	//영상통화 버튼
+	// 멘토가 날짜와 시간을 정해 '모의영상면접' 요청을 하고, 멘티가 그 요청을 승낙하면
+ 	// 그 날짜와 시간에만 '멘토링 기능(영상통화,채팅,이력서보기)'버튼이 활성화된다.
 	@RequestMapping("/videoCallButton")
 	@ResponseBody
 	public String videoCallButton(HttpServletRequest request, ScheduleVO vo) {
@@ -204,11 +205,12 @@ public class ScheduleController {
 		for(Map<String, Object> map:list) {
 			
 			for(String mapKey : map.keySet()) {
-				String start = (String) map.get("SCHEDULE_START");
-				String end = (String) map.get("SCHEDULE_END");
-				String resume_no = (String) map.get("RESUME_NO");
+				String start = (String) map.get("SCHEDULE_START");  //일정시작시점
+				String end = (String) map.get("SCHEDULE_END"); //일정끝지점
+				String resume_no = (String) map.get("RESUME_NO"); //이력서번호
 				Long startInt = Long.parseLong(start);
 				Long endInt = Long.parseLong(end);
+				// 오늘 날짜가 '일정시작지점'과 '일정끝지점' 사이에 있다면 '이력서번호'를 반환
 				if(startInt <= inToday) {
 					  
 					  if(inToday <= endInt) {
