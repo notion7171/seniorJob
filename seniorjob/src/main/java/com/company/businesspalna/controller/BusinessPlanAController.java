@@ -42,6 +42,7 @@ import com.company.mentoring.service.MentoringVO;
 import com.company.portfolio.service.FileRenamePolicy;
 import com.company.businesspalna.service.BusinessPalnAVO;
 
+//사업계획서 조회, 첨삭
 @Controller
 public class BusinessPlanAController {
 
@@ -50,7 +51,7 @@ public class BusinessPlanAController {
 	@Autowired BusinessPlanAMapper bpMapper;
 
 	
-	@RequestMapping("/testmyhome")			//사업계획서 하나만 조회. 
+	@RequestMapping("/testmyhome")			
 	public String testmyhome() {
 		return "mypage/testmyhome";
 	}
@@ -65,11 +66,11 @@ public class BusinessPlanAController {
 		return "business/getSearchBusinessPlanA";
 	}
 	
-	
-	@RequestMapping("/getBusinessPlanA")			//사업계획서 하나만 조회. 
+	//사업계획서 목록에서 사업계획서 제목을 클릭할 경우, 그 사업계획서 상세조회
+	@RequestMapping("/getBusinessPlanA")			
 	public String getBusinessPlanA(BusinessPalnAVO vo, Model model) {
-		bpService.getBusinessPlanA(vo);
-		model.addAttribute("bpp", vo);
+		bpService.getBusinessPlanA(vo); //사업계획서 제목을 클릭할 때 사업계획서 번호가 vo에 설정되고, 그 번호를 기준으로 사업계획서 단건 조회
+		model.addAttribute("bpp", vo); //조회한 결과값을 모델에 담음.
 		return "business/getBusinessPlanA";
 	}
 	
@@ -218,11 +219,12 @@ public class BusinessPlanAController {
 		return "mypage/mypageHome";
 	}
 	
-	@GetMapping("/seeCkBp") //첨삭받은 거 확인
+	//멘티가 사업계획서 리스트에서 '첨삭보기'버튼을 누를 시
+	@GetMapping("/seeCkBp") 
 	public String seeCkBp(BusinessPalnAVO vo, Model model) {
 		bpService.getBusinessPlanA(vo);
-		String col = bpMapper.getCollection(vo);
-		model.addAttribute("bpp", vo);
+		String col = bpMapper.getCollection(vo); // 멘토가 첨삭한 내용이 들어있는 html파일의 이름을 조회.
+ 		model.addAttribute("bpp", vo);
 		model.addAttribute("col", col);
 		return "business/seeCkBp";
 	}
@@ -259,6 +261,7 @@ public class BusinessPlanAController {
 		return crBadge;
 	}
 	
+	// 멘토가 사업계획서 첨삭한 내용(views/business/checkBusinessPlan.jsp)을 html 파일로 저장
 	@RequestMapping("/htmlSaveSom")
 	public String htmlSaveSom(@RequestParam(value="contents") String contents   //ajax로 넘어온 param contents를 String contents 변수로 받아줌
 							, @RequestParam(value="seq") int seq				//ajax로 넘어온 param seq를 int seq로 받아줌.
@@ -287,7 +290,6 @@ public class BusinessPlanAController {
 																IOUtils.toByteArray(input));	//content
 			//파일 저장소 경로 확인
 			String path = req.getServletContext().getRealPath("resources/upload");
-			//String path="C:\\Users\\beom\\git\\seniorjob\\seniorjob\\src\\main\\webapp\\resources\\upload";
 			System.out.println("htmlSaveSom:"+path);
 			
 			//새로운 파일 이름
