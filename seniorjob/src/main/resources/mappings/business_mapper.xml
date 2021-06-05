@@ -41,7 +41,7 @@
 		SELECT BUSINESS_SEQ.NEXTVAL FROM DUAL
 	</select>
 	
-	<!-- 사업계획서 단건조회 -->
+	<!-- 사업계획서 단건조회, 프로시저 이용  -->
 	<select id="getBusinessPlanA" parameterType="BusinessPalnAVO" resultType="BusinessPalnAVO" statementType="CALLABLE">
 		{call BUSINESS_SELECT_PROCEDURE( #{seq},
 										 #{business_a, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String},
@@ -216,8 +216,7 @@
 	WHERE MENTORID=#{mentorId}
 	</select>
 	
-	<!--  멘토가 첨삭요청 사업계획서 단건 조회 -->
-	<!-- 사업계획서 수정 -->
+	<!-- 멘토가 첨삭한 내용으로 만들어진 html 파일의 이름을 저장-->
 	<update id="collectionUpdate" parameterType="BusinessPalnAVO">
 	UPDATE BUSINESSPLANA 
 	<set>
