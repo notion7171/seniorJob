@@ -240,13 +240,13 @@ public class UsersController {
 	}
 
 	
-	//양소민 추가
-	//비밀번호 변경
+	
 	@RequestMapping("/updateInfo") // 비밀번호 수정폼
 	public String updateInfo() {
 		return "/users/updateInfo";
 	}
 	
+	//비밀번호 변경
 	@RequestMapping("/pwProc") //비밀번호 수정 처리
 	public String pwProc(UsersVO vo, BindingResult result, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
@@ -257,11 +257,11 @@ public class UsersController {
 		String pw = vo.getPassword();  //새로 입력받은 비밀번호
 		String pwe = pwdEncoder.encode(pw);   // 새로 입력받은 비밀번호 암호화
 		vo.setId(id);
-		UsersVO users = usersMapper.logCheck(vo);
-		boolean psMatch = pwdEncoder.matches(vo.getPasswordold(), users.getPassword());
-		if (psMatch == true) {
+		UsersVO users = usersMapper.logCheck(vo); // id 값으로 db에 저장된 정보 가져옴
+		boolean psMatch = pwdEncoder.matches(vo.getPasswordold(), users.getPassword()); // 입력한 '현재 비밀번호'와 db에 저장된 비밀번호를 비교
+		if (psMatch == true) { //일치할 경우에만
 			vo.setPassword(pwe);
-			usersService.updateInfo(vo);  //비밀번호 수정
+			usersService.updateInfo(vo);  // 새로 입력받은 비밀번호로 비밀번호 수정
 			return "mypage/mypageHome";
 		} else {
 			System.out.println("error");
